@@ -1,0 +1,19 @@
+.answer {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  cursor: pointer;
+  border-radius: 0.375rem;
+}
+
+.answer:hover {
+  background-color: #80808052;
+  transition: 0.3s;
+}
+@media (max-width: 1023px) {
+  .ant-image-img {
+    width: 100% !important;
+  }
+}

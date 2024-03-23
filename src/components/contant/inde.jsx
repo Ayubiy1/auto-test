@@ -1,8 +1,11 @@
 import { Button, Typography } from "antd";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const ContentComp = () => {
   const userActive = useSelector((state) => state?.userActive);
+
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col lg:flex-row items-center justify-around">
@@ -13,11 +16,23 @@ const ContentComp = () => {
         </Typography>
 
         {userActive == true ? (
-          <Button type="primary" className="mt-2">
+          <Button
+            onClick={() => {
+              navigate("/tests");
+            }}
+            type="primary"
+            className="mt-2"
+          >
             Sinovni boshlash
           </Button>
         ) : (
-          <Button type="primary" className="mt-2">
+          <Button
+            onClick={() => {
+              navigate("/tests");
+            }}
+            type="primary"
+            className="mt-2"
+          >
             Tizimga kirish
           </Button>
         )}

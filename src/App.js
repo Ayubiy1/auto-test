@@ -4,18 +4,29 @@ import Tests from "./pages/tests";
 import Home from "./pages/home";
 import "./App.css";
 import History from "./pages/history";
+import Test from "./pages/test";
+import Results from "./pages/results";
+import Contex from "./components/contex";
+import { useState } from "react";
 
 function App() {
+  const [chooseAllAnswer, setChooseAllAnswer] = useState([]);
+
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Home />}>
-          <Route path="/" element={<ContentComp />} />
-          <Route path="/tests" element={<Tests />}></Route>
-          <Route path="/history" element={<History />} />
-        </Route>
-        <Route path="login" element={<>Login</>} />
-      </Routes>
+      <Contex.Provider value={{ chooseAllAnswer, setChooseAllAnswer }}>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route path="/" element={<ContentComp />} />
+            <Route path="/tests" element={<Tests />}></Route>
+
+            <Route path="test/:variant/:id" element={<Test />} />
+            <Route path="test/:variant/results" element={<Results />} />
+            <Route path="/history" element={<History />} />
+          </Route>
+          <Route path="login" element={<>Login</>} />
+        </Routes>
+      </Contex.Provider>
     </>
   );
 }

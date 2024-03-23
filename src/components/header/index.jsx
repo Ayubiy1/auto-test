@@ -2,10 +2,12 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, Button, theme } from "antd";
 import { FaUserCircle } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const { Header } = Layout;
 const HeaderComp = ({ collapsed, setCollapsed }) => {
   const userActive = useSelector((state) => state?.userActive);
+  const navigate = useNavigate();
 
   const {
     token: { colorBgContainer },
@@ -21,7 +23,10 @@ const HeaderComp = ({ collapsed, setCollapsed }) => {
       >
         <img
           src="https://e-avtomaktab.uz/Vesperr/assets/img/logo_new.png"
-          className="w-[181px]"
+          className="w-[181px] cursor-pointer"
+          onClick={() => {
+            navigate("/");
+          }}
         />
 
         <ul className="hidden md:flex gap-2 items-center justify-center list-none m-0 p-0">
