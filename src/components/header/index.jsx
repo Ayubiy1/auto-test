@@ -51,7 +51,13 @@ const HeaderComp = ({ collapsed, setCollapsed }) => {
             <FaUserCircle />
           </span>
         ) : (
-          <Button type="primary" className="rounded-full">
+          <Button
+            type="primary"
+            className="rounded-full"
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
             Login
           </Button>
         )}

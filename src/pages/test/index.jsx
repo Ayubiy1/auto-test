@@ -24,7 +24,7 @@ const Test = () => {
   const { data, isLoading } = useQuery(
     ["tests-uz-data", paginatsion1, paginatsion2],
     () => {
-      return axios.get(`https://127cbe5d0bdd146b.mokky.dev/test-uz/?id=${id}`);
+      return axios.get(`http://localhost:3004/test-uz/?id=${id}`);
     }
   );
 

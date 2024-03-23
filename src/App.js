@@ -8,6 +8,8 @@ import Test from "./pages/test";
 import Results from "./pages/results";
 import Contex from "./components/contex";
 import { useState } from "react";
+import Login from "./pages/login";
+import Register from "./pages/register";
 
 function App() {
   const [chooseAllAnswer, setChooseAllAnswer] = useState([]);
@@ -24,7 +26,16 @@ function App() {
             <Route path="test/:variant/results" element={<Results />} />
             <Route path="/history" element={<History />} />
           </Route>
-          <Route path="login" element={<>Login</>} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route
+            path="*"
+            element={
+              <div className="flex justify-center items-center h-[100vh] text-[50px]">
+                404
+              </div>
+            }
+          />
         </Routes>
       </Contex.Provider>
     </>
