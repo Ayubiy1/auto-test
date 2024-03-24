@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Contex from "../contex";
 
+import Logo from "./logo_new.png";
+
 const { Header } = Layout;
 const HeaderComp = ({ collapsed, setCollapsed }) => {
   const { userActive } = useContext(Contex);
@@ -25,7 +27,7 @@ const HeaderComp = ({ collapsed, setCollapsed }) => {
         className="flex items-center justify-between px-10"
       >
         <img
-          src="https://e-avtomaktab.uz/Vesperr/assets/img/logo_new.png"
+          src={Logo}
           className="w-[181px] cursor-pointer"
           onClick={() => {
             navigate("/");

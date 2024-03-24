@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 import Contex from "../../components/contex";
 
 const Login = () => {
-  const { setUserActive } = useContext(Contex);
+  const { setUserActive, userId, setUserId } = useContext(Contex);
 
   const navigator = useNavigate();
 
@@ -23,6 +23,7 @@ const Login = () => {
 
     if (res) {
       navigator("/");
+      setUserId(res.id);
       setUserActive(true);
     }
   };
@@ -38,16 +39,16 @@ const Login = () => {
           <h2 className="text-center">Login</h2>
 
           <Form.Item
-            label="Email"
+            label="Number"
             name="number"
             rules={[
               {
                 required: true,
-                message: "Please input your email!",
+                message: "Please input your Number!",
               },
             ]}
           >
-            <Input />
+            <Input type="number" />
           </Form.Item>
 
           <Form.Item

@@ -1,25 +1,27 @@
 import axios from "axios";
 import { useContext, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router";
 import { Button, Image, Skeleton } from "antd";
 import Typography from "antd/es/typography/Typography";
 
 import "./style.css";
 
-import Images1 from "./Autotest_Images/1.png";
+import Images1 from "./Autotest_Images/i.webp";
 import Contex from "../../components/contex";
 
 const Test = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { setChooseAllAnswer } = useContext(Contex);
+  const { setChooseAllAnswer, userId, setUserId } = useContext(Contex);
 
   const [choosAnswers, setChoosAnswers] = useState([]);
 
   const [chooseAnswer, setChooseAnswer] = useState("0");
   const [paginatsion1, setPAgination1] = useState(0);
   const [paginatsion2, setPAgination2] = useState(1);
+  const [variantName, setVariantName] = useState("");
+  console.log(variantName);
 
   const { data, isLoading } = useQuery(
     ["tests-uz-data", paginatsion1, paginatsion2],
@@ -27,6 +29,29 @@ const Test = () => {
       return axios.get(`http://localhost:3004/test-uz/?id=${id}`);
     }
   );
+  const { mutate } = useMutation(
+    (newData) => {
+      return axios.post(`http://localhost:3004/answers`, newData);
+    },
+    {
+      onSuccess: (response) => {
+        navigate(`/test/${variantName}/results`);
+      },
+      onError: (response) => {
+        console.log("error");
+      },
+    }
+  );
+
+  const resultAdd = ({ answers, variantName }) => {
+    setVariantName(variantName);
+
+    const newAnswer = { userId: userId, answers: answers ? [...answers] : [] };
+    console.log(newAnswer);
+    if (answers) {
+      mutate(newAnswer);
+    }
+  };
 
   const changeAnswer = (item, test, answer) => {
     setChooseAnswer(answer?.text);
@@ -57,7 +82,6 @@ const Test = () => {
           return item?.tests
             ?.slice(paginatsion1, paginatsion2)
             .map((test, index) => {
-              console.log(test?.media?.name);
               return (
                 <div key={test.id}>
                   <div className="flex gap-1 items-center justify-between my3 lg:mt10">
@@ -73,8 +97,7 @@ const Test = () => {
 
                     <Button
                       onClick={() => {
-                        navigate(`/test/${item?.name}/results`);
-                        setChooseAllAnswer(choosAnswers);
+                        resultAdd({ choosAnswers, variantName: item?.name });
                       }}
                     >
                       Yakunlash

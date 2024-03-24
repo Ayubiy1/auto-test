@@ -16,9 +16,17 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [chooseAllAnswer, setChooseAllAnswer] = useState([]);
+  const [chooseAllAnswer, setChooseAllAnswer] = useLocalStorageState(
+    "results",
+    {
+      defaultValue: null,
+    }
+  );
   const [userActive, setUserActive] = useLocalStorageState("user", {
     defaultValue: false,
+  });
+  const [userId, setUserId] = useLocalStorageState("user-id", {
+    defaultValue: 0,
   });
 
   useEffect(() => {
@@ -35,6 +43,8 @@ function App() {
           setChooseAllAnswer,
           userActive,
           setUserActive,
+          userId,
+          setUserId,
         }}
       >
         <Routes>

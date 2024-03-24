@@ -44,7 +44,6 @@ const Register = () => {
     const user = { ...values };
 
     if (inspection) {
-      console.log("bunday ma'lumotil user mavjud");
       error();
     } else {
       mutate(user);
