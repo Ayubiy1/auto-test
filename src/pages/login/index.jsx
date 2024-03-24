@@ -1,18 +1,31 @@
 import { Button, Form, Input, Typography } from "antd";
 import axios from "axios";
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router";
+import Contex from "../../components/contex";
 
 const Login = () => {
+  const { setUserActive } = useContext(Contex);
+
   const navigator = useNavigate();
 
   const { data } = useQuery("users-login", () => {
     return axios.get(`http://localhost:3004/users`);
   });
 
-  //   console.log(data?.data);
+  const onFinish = (values) => {
+    const res = data?.data.find((value) => {
+      return (
+        value?.number === values.number && value?.password == values?.password
+      );
+    });
 
-  const onFinish = () => {};
+    if (res) {
+      navigator("/");
+      setUserActive(true);
+    }
+  };
 
   return (
     <>
@@ -26,7 +39,7 @@ const Login = () => {
 
           <Form.Item
             label="Email"
-            name="email"
+            name="number"
             rules={[
               {
                 required: true,

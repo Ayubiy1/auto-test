@@ -21,7 +21,7 @@ const Register = () => {
     });
   };
 
-  const { data } = useQuery("users-login", () => {
+  const { data } = useQuery("users-reg", () => {
     return axios.get(`http://localhost:3004/users`);
   });
   const { mutate, isLoading } = useMutation(

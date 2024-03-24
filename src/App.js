@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation, useNavigate } from "react-router";
 import ContentComp from "./components/contant/inde";
 import Tests from "./pages/tests";
 import Home from "./pages/home";
@@ -7,16 +7,36 @@ import History from "./pages/history";
 import Test from "./pages/test";
 import Results from "./pages/results";
 import Contex from "./components/contex";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Login from "./pages/login";
 import Register from "./pages/register";
+import { useLocalStorageState } from "ahooks";
 
 function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [chooseAllAnswer, setChooseAllAnswer] = useState([]);
+  const [userActive, setUserActive] = useLocalStorageState("user", {
+    defaultValue: false,
+  });
+
+  useEffect(() => {
+    if (userActive !== true && location.pathname != "/") {
+      navigate("/login");
+    }
+  }, [userActive]);
 
   return (
     <>
-      <Contex.Provider value={{ chooseAllAnswer, setChooseAllAnswer }}>
+      <Contex.Provider
+        value={{
+          chooseAllAnswer,
+          setChooseAllAnswer,
+          userActive,
+          setUserActive,
+        }}
+      >
         <Routes>
           <Route path="/" element={<Home />}>
             <Route path="/" element={<ContentComp />} />

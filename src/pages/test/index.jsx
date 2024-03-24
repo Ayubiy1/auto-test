@@ -57,6 +57,7 @@ const Test = () => {
           return item?.tests
             ?.slice(paginatsion1, paginatsion2)
             .map((test, index) => {
+              console.log(test?.media?.name);
               return (
                 <div key={test.id}>
                   <div className="flex gap-1 items-center justify-between my3 lg:mt10">
@@ -100,7 +101,14 @@ const Test = () => {
 
                     <div className="flex flex-col lg:flex-row items-center justify-between lg:mt-10">
                       <div className="w-[100%] lg:w-[40%] lg:order-2 flex items-center justify-center mt-3">
-                        <Image src={Images1} alt="" />
+                        <Image
+                          src={
+                            test?.media?.name
+                              ? `https://github.com/Ayubiy1/test-auto-imgs/blob/main/${test?.media?.name}.png?raw=true`
+                              : Images1
+                          }
+                          alt=""
+                        />
                       </div>
 
                       <div className="mt-3 w-[100%] lg:w-[60%]">

@@ -1,12 +1,15 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, Button, theme } from "antd";
+import { useContext } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Contex from "../contex";
 
 const { Header } = Layout;
 const HeaderComp = ({ collapsed, setCollapsed }) => {
-  const userActive = useSelector((state) => state?.userActive);
+  const { userActive } = useContext(Contex);
+  const userActiveR = useSelector((state) => state?.userActive);
   const navigate = useNavigate();
 
   const {
