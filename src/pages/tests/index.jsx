@@ -1,11 +1,11 @@
 import { Col, Row, Skeleton, Typography } from "antd";
-import axios from "axios";
 import { useQuery } from "react-query";
 
 import { FaRegHeart } from "react-icons/fa";
 
 import "./style.css";
 import { useNavigate } from "react-router";
+// import axios from "axios";
 
 const Tests = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Tests = () => {
 
   return (
     <>
-      <Row className={"flex items-start  justify-center  p-2"}>
+      {/* <Row className={"flex items-start  justify-center  p-2"}>
         {isLoading == false &&
           data?.data?.map((item) => {
             return (
@@ -214,7 +214,7 @@ const Tests = () => {
             </Col>
           </>
         )}
-      </Row>
+      </Row> */}
     </>
   );
 };
