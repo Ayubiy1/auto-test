@@ -11,7 +11,7 @@ import Images1 from "./Autotest_Images/i.webp";
 import Contex from "../../components/contex";
 
 const Test = () => {
-  const { id } = useParams();
+  const { id, variant } = useParams();
   const navigate = useNavigate();
   const { setChooseAllAnswer, userId, setUserId } = useContext(Contex);
 
@@ -21,12 +21,11 @@ const Test = () => {
   const [paginatsion1, setPAgination1] = useState(0);
   const [paginatsion2, setPAgination2] = useState(1);
   const [variantName, setVariantName] = useState("");
-  console.log(variantName);
 
   const { data, isLoading } = useQuery(
     ["tests-uz-data", paginatsion1, paginatsion2],
     () => {
-      return axios.get(`http://localhost:3004/test-uz/?id=${id}`);
+      return axios.get(`http://localhost:3004/test-uz/?name=${variant}`);
     }
   );
   const { mutate } = useMutation(
@@ -35,7 +34,7 @@ const Test = () => {
     },
     {
       onSuccess: (response) => {
-        navigate(`/test/${variantName}/results`);
+        navigate(`/test/results`);
       },
       onError: (response) => {
         console.log("error");
@@ -43,12 +42,17 @@ const Test = () => {
     }
   );
 
-  const resultAdd = ({ answers, variantName }) => {
+  const resultAdd = ({ choosAnswers, variantName }) => {
     setVariantName(variantName);
 
-    const newAnswer = { userId: userId, answers: answers ? [...answers] : [] };
+    const newAnswer = {
+      userId: userId,
+      variantName: variantName,
+      answers: choosAnswers ? [...choosAnswers] : [],
+    };
     console.log(newAnswer);
-    if (answers) {
+
+    if (choosAnswers) {
       mutate(newAnswer);
     }
   };

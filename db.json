@@ -1,17 +1,11 @@
 {
-  "posts": [
-    {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
   "users": [
     {
       "fullName": "Ayubbek O'rinboyev",
       "userName": "Ayubiy",
       "number": "998905469066",
       "password": "ayubbektest",
+      "rol": "user",
       "id": 1
     },
     {
@@ -19,6 +13,7 @@
       "userName": "Ayubiy1",
       "number": "998905469061",
       "password": "ayubiy111",
+      "rol": "user",
       "id": 2
     }
   ],
@@ -18784,14 +18779,38 @@
   "answers": [
     {
       "userId": 2,
+      "variantName": "2-variant",
+      "answers": [
+        {
+          "testId": 91,
+          "answerText": "Ҳаракат бўлагини ўзгартирмасдан тўхташи ва мажбурий тўхташ чироқларини ёқиши"
+        },
+        {
+          "testId": 92,
+          "answerText": "Ҳаракат тезлигини 5 км/с дан ошмаслиги кераклигини билдиради"
+        },
+        {
+          "testId": 93,
+          "answerText": "3"
+        },
+        {
+          "testId": 94,
+          "answerText": "Шлагбаумнинг ҳолатига асосланган ҳолда кесишмадан ўтиши керак"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "userId": 2,
+      "variantName": "1-variant",
       "answers": [
         {
           "testId": 1,
-          "answerText": "Иккала автомобилга"
+          "answerText": "Қизилга"
         },
         {
           "testId": 2,
-          "answerText": "Фақат A ва Г йўналишлари бўйлаб"
+          "answerText": "Фақат В йўналиш бўйлаб"
         },
         {
           "testId": 3,
@@ -18799,39 +18818,22 @@
         },
         {
           "testId": 4,
-          "answerText": "Сариқ автомобил"
+          "answerText": "Яшил автомобил"
         },
         {
           "testId": 5,
-          "answerText": "Оқ, кўк ва сариқ автомобилларга"
+          "answerText": "Кўк, яшил ва оқ автомобилларга"
+        },
+        {
+          "testId": 6,
+          "answerText": "Aвтомобил ва автобус ҳайдовчиси"
+        },
+        {
+          "testId": 7,
+          "answerText": "Тақиқланади"
         }
       ],
-      "id": 1
-    },
-    {
-      "userId": 2,
-      "answers": [],
       "id": 2
-    },
-    {
-      "userId": 2,
-      "answers": [],
-      "id": 3
-    },
-    {
-      "userId": 2,
-      "answers": [],
-      "id": 4
-    },
-    {
-      "userId": 2,
-      "answers": [],
-      "id": 5
-    },
-    {
-      "userId": 2,
-      "answers": [],
-      "id": 6
     }
   ]
 }

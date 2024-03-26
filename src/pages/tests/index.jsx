@@ -32,7 +32,8 @@ const Tests = () => {
                 <div
                   className="m-1 shadow-lg rounded-md h-[111px] cursor-pointer flex items-center p-5"
                   onClick={() => {
-                    navigate(`/test/${item?.name}/${item?.id}`);
+                    navigate(`/test/${item?.name}`);
+                    // /${item?.id}
                   }}
                 >
                   <div className="w-[100%] cards">

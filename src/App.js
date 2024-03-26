@@ -52,8 +52,8 @@ function App() {
             <Route path="/" element={<ContentComp />} />
             <Route path="/tests" element={<Tests />}></Route>
 
-            <Route path="test/:variant/:id" element={<Test />} />
-            <Route path="test/:variant/results" element={<Results />} />
+            <Route path="test/:variant" element={<Test />} />
+            <Route path="test/results" element={<Results />} />
             <Route path="/history" element={<History />} />
           </Route>
           <Route path="login" element={<Login />} />

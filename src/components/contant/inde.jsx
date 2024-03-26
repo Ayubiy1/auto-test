@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 
 const ContentComp = () => {
   const userActive = useSelector((state) => state?.userActive);
+  const user = localStorage.getItem("user");
 
   const navigate = useNavigate();
 
@@ -15,7 +16,7 @@ const ContentComp = () => {
           Onlayn masofaviy ta'lim platformasi
         </Typography>
 
-        {userActive == true ? (
+        {user == "true" ? (
           <Button
             onClick={() => {
               navigate("/tests");
@@ -28,7 +29,7 @@ const ContentComp = () => {
         ) : (
           <Button
             onClick={() => {
-              navigate("/tests");
+              navigate("/login");
             }}
             type="primary"
             className="mt-2"
