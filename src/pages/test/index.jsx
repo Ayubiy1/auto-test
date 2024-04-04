@@ -16,25 +16,38 @@ const Test = () => {
   const { setChooseAllAnswer, userId, setUserId } = useContext(Contex);
 
   const [choosAnswers, setChoosAnswers] = useState([]);
+  // console.log(choosAnswers);
 
   const [chooseAnswer, setChooseAnswer] = useState("0");
   const [paginatsion1, setPAgination1] = useState(0);
   const [paginatsion2, setPAgination2] = useState(1);
   const [variantName, setVariantName] = useState("");
+  const [finaly, setFinaly] = useState(false);
 
   const { data, isLoading } = useQuery(
     ["tests-uz-data", paginatsion1, paginatsion2],
     () => {
-      return axios.get(`http://localhost:3004/test-uz/?name=${variant}`);
+      return axios.get(
+        `https://auto-test-api-8ch5.onrender.com/test-uz/?name=${variant}`
+      );
     }
   );
+  const { data: resultsData } = useQuery(["res-data", variant], () => {
+    return axios.get(
+      `https://auto-test-api-8ch5.onrender.com/answers/?variantName=${variant}`
+    );
+  });
+
   const { mutate } = useMutation(
     (newData) => {
-      return axios.post(`http://localhost:3004/answers`, newData);
+      return axios.post(
+        `https://auto-test-api-8ch5.onrender.com/answers`,
+        newData
+      );
     },
     {
       onSuccess: (response) => {
-        navigate(`/test/results`);
+        // navigate(`/test/results`);
       },
       onError: (response) => {
         console.log("error");
@@ -43,18 +56,36 @@ const Test = () => {
   );
 
   const resultAdd = ({ choosAnswers, variantName }) => {
+    setFinaly(true);
     setVariantName(variantName);
+    // console.log(resultsData);
+    const oldDataRes = resultsData?.data[0];
+    const oldDataResAnswr = resultsData?.data[0]?.answers[0];
+
+    // console.log(oldDataRes);
+    // console.log(oldDataResAnswr);
 
     const newAnswer = {
       userId: userId,
       variantName: variantName,
-      answers: choosAnswers ? [...choosAnswers] : [],
+      answers: {
+        id: 1,
+        date: new Date(),
+        answr: [choosAnswers ? [...choosAnswers] : []],
+      },
     };
-    console.log(newAnswer);
+    // console.log(newAnswer);
+    // console.log(choosAnswers.length);
 
-    if (choosAnswers) {
-      mutate(newAnswer);
-    }
+    // if (oldDataRes == undefined) {
+    //   mutate(newAnswer);
+    // } else {
+    //   console.log(oldDataRes);
+    //   console.log(oldDataResAnswr);
+    // }
+
+    // if (choosAnswers) {
+    // }
   };
 
   const changeAnswer = (item, test, answer) => {
@@ -66,6 +97,7 @@ const Test = () => {
       const newAnswer = {
         testId: test?.id,
         answerText: answer?.text,
+        answer: answer?.answer,
       };
 
       if (existingItem?.testId !== test?.id) {
@@ -87,7 +119,7 @@ const Test = () => {
             ?.slice(paginatsion1, paginatsion2)
             .map((test, index) => {
               return (
-                <div key={test.id}>
+                <div key={index}>
                   <div className="flex gap-1 items-center justify-between my3 lg:mt10">
                     <Button
                       onClick={() => {
@@ -103,6 +135,7 @@ const Test = () => {
                       onClick={() => {
                         resultAdd({ choosAnswers, variantName: item?.name });
                       }}
+                      disabled={choosAnswers.length < 1 ? true : false}
                     >
                       Yakunlash
                     </Button>
@@ -139,7 +172,7 @@ const Test = () => {
                       </div>
 
                       <div className="mt-3 w-[100%] lg:w-[60%]">
-                        {test.choices.map((answer) => {
+                        {test.choices.map((answer, index) => {
                           const isSelected = choosAnswers.some(
                             (item) =>
                               item.testId === test.id &&
@@ -158,7 +191,7 @@ const Test = () => {
                               onClick={() => {
                                 changeAnswer(item, test, answer);
                               }}
-                              key={answer.text}
+                              key={index}
                             >
                               <Typography className="font-bold">
                                 {answer.text}

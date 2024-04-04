@@ -3,15 +3,15 @@ import { useQuery } from "react-query";
 
 import { FaRegHeart } from "react-icons/fa";
 
-import "./style.css";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import "./style.css";
 
 const Tests = () => {
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery("tests-uz-data", () => {
-    return axios.get(`http://localhost:3004/test-uz`);
+    return axios.get(`https://auto-test-api-8ch5.onrender.com/test-uz`);
   });
 
   return (

@@ -12,14 +12,14 @@ const Results = () => {
   const navigate = useNavigate();
 
   const { data } = useQuery("", () => {
-    return axios.get("http://localhost:3004/answers");
+    return axios.get("https://auto-test-api-8ch5.onrender.com/answers");
   });
 
   return (
     <>
       <div>
         <Row className={"flex items-start  justify-center  p-2"}>
-          {data?.data
+          {/* {data?.data
             ?.filter((i) => i?.userId == userId)
             .map((item, index) => {
               return (
@@ -73,7 +73,7 @@ const Results = () => {
                   </div>
                 </Col>
               );
-            })}
+            })} */}
         </Row>
       </div>
     </>

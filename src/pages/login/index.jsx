@@ -11,7 +11,7 @@ const Login = () => {
   const navigator = useNavigate();
 
   const { data } = useQuery("users-login", () => {
-    return axios.get(`http://localhost:3004/users`);
+    return axios.get(`https://auto-test-api-8ch5.onrender.com/users`);
   });
 
   const onFinish = (values) => {

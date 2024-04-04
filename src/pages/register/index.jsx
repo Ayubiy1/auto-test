@@ -22,11 +22,14 @@ const Register = () => {
   };
 
   const { data } = useQuery("users-reg", () => {
-    return axios.get(`http://localhost:3004/users`);
+    return axios.get(`https://auto-test-api-8ch5.onrender.com/users`);
   });
   const { mutate, isLoading } = useMutation(
     (newUser) => {
-      return axios.post(`http://localhost:3004/users`, newUser);
+      return axios.post(
+        `https://auto-test-api-8ch5.onrender.com/users`,
+        newUser
+      );
     },
     {
       onSuccess: () => {
