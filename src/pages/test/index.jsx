@@ -35,7 +35,7 @@ const Test = () => {
           return 0;
         }
       });
-    }, 1000);
+    }, 1);
 
     return () => clearInterval(interval);
   }, [finishTimeM]);
