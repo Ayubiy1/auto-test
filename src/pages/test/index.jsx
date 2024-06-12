@@ -82,14 +82,7 @@ const Test = () => {
                 >
                   Oldingi test
                 </Button>
-                <Button
-                  // onClick={() => {
-                  //   resultAdd({ choosAnswers, variantName: item?.name });
-                  //   navigate("/test/results");
-                  //   dispatch(setVariantName(item?.name));
-                  // }}
-                  disabled={isFinished}
-                >
+                <Button disabled={isFinished}>
                   {finishTimeM}:{finishTimeS < 10 ? 0 : ""}
                   {finishTimeS}
                 </Button>
@@ -180,6 +173,17 @@ const Test = () => {
                 {item?.tests.length} ta savoldan {choosAnswers?.length} tasini
                 topdingiz
               </span>
+
+              <div className="flex flex-col items-start">
+                <span className="">
+                  {choosAnswers.filter((chA) => chA?.answer == true).length}tasi
+                  to'g'ri
+                </span>
+                <span className="">
+                  {choosAnswers.filter((chA) => chA?.answer == false).length}
+                  tasi no to'g'ri
+                </span>
+              </div>
 
               <div className="flex items-center justify-end">
                 <Button type="primary">Orqaga qaytish</Button>
