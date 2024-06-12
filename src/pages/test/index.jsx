@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 
 const Test = () => {
   const { id, variant } = useParams();
+  const navigate = useNavigate();
+
   const { userId, setChooseAllAnswer } = useContext(Contex);
   const [finishTimeM, setFinishTimeM] = useState(25);
   const [finishTimeS, setFinishTimeS] = useState(0);
@@ -186,7 +188,14 @@ const Test = () => {
               </div>
 
               <div className="flex items-center justify-end">
-                <Button type="primary">Orqaga qaytish</Button>
+                <Button
+                  onClick={() => {
+                    navigate("/tests");
+                  }}
+                  type="primary"
+                >
+                  Orqaga qaytish
+                </Button>
               </div>
             </>
           );
