@@ -6,6 +6,7 @@ const initialState = {
   collapsed: false,
   search: "",
   userActive: false,
+  variantName: "",
 };
 
 const counterSlice = createSlice({
@@ -15,8 +16,12 @@ const counterSlice = createSlice({
     setLoadingTrue: (state, actions) => {
       state.loadingg = actions.payload;
     },
+
+    setVariantName: (state, action) => {
+      state.variantName = action.payload;
+    },
   },
 });
 
-export const { setLoadingTrue } = counterSlice.actions;
+export const { setLoadingTrue, setVariantName } = counterSlice.actions;
 export default counterSlice.reducer;

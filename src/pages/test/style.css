@@ -4,13 +4,15 @@
   align-items: center;
   justify-content: center;
   transition: 0.3s;
-  cursor: pointer;
+  /* cursor: pointer; */
   border-radius: 0.375rem;
 }
 
-.answer:hover {
-  background-color: #80808052;
-  transition: 0.3s;
+@media (min-width: 1023px) {
+  .answer:hover {
+    background-color: #80808052;
+    transition: 0.3s;
+  }
 }
 @media (max-width: 1023px) {
   .ant-image-img {

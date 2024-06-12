@@ -1,228 +1,169 @@
 import axios from "axios";
-import { useContext, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useContext, useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router";
-import { Button, Image, Skeleton } from "antd";
-import Typography from "antd/es/typography/Typography";
+import { Button, Image, Modal, Skeleton, Typography } from "antd";
 
 import "./style.css";
-
 import Images1 from "./Autotest_Images/i.webp";
 import Contex from "../../components/contex";
+import { setVariantName } from "../../redux/store";
+import { useDispatch } from "react-redux";
 
 const Test = () => {
   const { id, variant } = useParams();
-  const navigate = useNavigate();
-  const { setChooseAllAnswer, userId, setUserId } = useContext(Contex);
-
+  const { userId, setChooseAllAnswer } = useContext(Contex);
+  const [finishTimeM, setFinishTimeM] = useState(25);
+  const [finishTimeS, setFinishTimeS] = useState(0);
   const [choosAnswers, setChoosAnswers] = useState([]);
-  // console.log(choosAnswers);
-
-  const [chooseAnswer, setChooseAnswer] = useState("0");
   const [paginatsion1, setPAgination1] = useState(0);
   const [paginatsion2, setPAgination2] = useState(1);
-  const [variantName, setVariantName] = useState("");
-  const [finaly, setFinaly] = useState(false);
+  const [selectAnswer, setSelectAnswer] = useState({});
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFinishTimeS((prev) => {
+        if (prev > 0) {
+          return prev - 1;
+        } else if (finishTimeM > 0) {
+          setFinishTimeM((prevM) => prevM - 1);
+          return 59;
+        } else {
+          setIsFinished(true);
+          clearInterval(interval);
+          return 0;
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [finishTimeM]);
 
   const { data, isLoading } = useQuery(
     ["tests-uz-data", paginatsion1, paginatsion2],
-    () => {
-      return axios.get(
+    () =>
+      axios.get(
         `https://auto-test-api-8ch5.onrender.com/test-uz/?name=${variant}`
-      );
-    }
-  );
-  const { data: resultsData } = useQuery(["res-data", variant], () => {
-    return axios.get(
-      `https://auto-test-api-8ch5.onrender.com/answers/?variantName=${variant}`
-    );
-  });
-
-  const { mutate } = useMutation(
-    (newData) => {
-      return axios.post(
-        `https://auto-test-api-8ch5.onrender.com/answers`,
-        newData
-      );
-    },
-    {
-      onSuccess: (response) => {
-        // navigate(`/test/results`);
-      },
-      onError: (response) => {
-        console.log("error");
-      },
-    }
+      )
   );
 
-  const resultAdd = ({ choosAnswers, variantName }) => {
-    setFinaly(true);
-    setVariantName(variantName);
-    // console.log(resultsData);
-    const oldDataRes = resultsData?.data[0];
-    const oldDataResAnswr = resultsData?.data[0]?.answers[0];
+  const changeAnswer = (test, answer) => {
+    if (!selectAnswer[test.id]) {
+      setChoosAnswers((prev) => [
+        ...prev,
+        { testId: test.id, answerText: answer.text, answer: answer.answer },
+      ]);
 
-    // console.log(oldDataRes);
-    // console.log(oldDataResAnswr);
-
-    const newAnswer = {
-      userId: userId,
-      variantName: variantName,
-      answers: {
-        id: 1,
-        date: new Date(),
-        answr: [choosAnswers ? [...choosAnswers] : []],
-      },
-    };
-    // console.log(newAnswer);
-    // console.log(choosAnswers.length);
-
-    // if (oldDataRes == undefined) {
-    //   mutate(newAnswer);
-    // } else {
-    //   console.log(oldDataRes);
-    //   console.log(oldDataResAnswr);
-    // }
-
-    // if (choosAnswers) {
-    // }
+      setSelectAnswer((prev) => ({
+        ...prev,
+        [test.id]: answer.text,
+      }));
+    }
   };
 
-  const changeAnswer = (item, test, answer) => {
-    setChooseAnswer(answer?.text);
-
-    setChoosAnswers((prev) => {
-      const existingItem = prev?.find((item) => item.testId === test?.id);
-
-      const newAnswer = {
-        testId: test?.id,
-        answerText: answer?.text,
-        answer: answer?.answer,
-      };
-
-      if (existingItem?.testId !== test?.id) {
-        return [...prev, newAnswer];
-      }
-      if (existingItem?.testId == test?.id) {
-        return [...choosAnswers.filter((i) => i.testId != test?.id), newAnswer];
-      }
-
-      return prev;
-    });
+  const resultAdd = ({ choosAnswers, variantName }) => {
+    setChooseAllAnswer(choosAnswers);
   };
 
   return (
     <>
       {!isLoading ? (
-        data?.data?.map((item) => {
-          return item?.tests
-            ?.slice(paginatsion1, paginatsion2)
-            .map((test, index) => {
-              return (
-                <div key={index}>
-                  <div className="flex gap-1 items-center justify-between my3 lg:mt10">
-                    <Button
-                      onClick={() => {
-                        setPAgination1((prev) => prev - 1);
-                        setPAgination2((prev) => prev - 1);
-                      }}
-                      disabled={paginatsion1 < 1}
-                    >
-                      Oldingi test
-                    </Button>
-
-                    <Button
-                      onClick={() => {
-                        resultAdd({ choosAnswers, variantName: item?.name });
-                      }}
-                      disabled={choosAnswers.length < 1 ? true : false}
-                    >
-                      Yakunlash
-                    </Button>
-
-                    <Button
-                      onClick={() => {
-                        setPAgination1((prev) => prev + 1);
-                        setPAgination2((prev) => prev + 1);
-                      }}
-                      disabled={paginatsion2 == item?.tests.length}
-                    >
-                      Keyingi test
-                    </Button>
+        data?.data?.map((item) =>
+          item?.tests?.slice(paginatsion1, paginatsion2).map((test, index) => (
+            <div key={index}>
+              <div className="flex gap-1 items-center justify-between my-3 lg:mt-10">
+                <Button
+                  onClick={() => {
+                    setPAgination1(paginatsion1 - 1);
+                    setPAgination2(paginatsion2 - 1);
+                  }}
+                  disabled={paginatsion1 < 1}
+                >
+                  Oldingi test
+                </Button>
+                <Button
+                  // onClick={() => {
+                  //   resultAdd({ choosAnswers, variantName: item?.name });
+                  //   navigate("/test/results");
+                  //   dispatch(setVariantName(item?.name));
+                  // }}
+                  disabled={isFinished}
+                >
+                  {finishTimeM}:{finishTimeS < 10 ? 0 : ""}
+                  {finishTimeS}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setPAgination1(paginatsion1 + 1);
+                    setPAgination2(paginatsion2 + 1);
+                  }}
+                  disabled={paginatsion2 === item?.tests.length}
+                >
+                  Keyingi test
+                </Button>
+              </div>
+              <div className="mt-5 md:mt-10">
+                <span className="text-[#0e5cad] sm:text-[20px] md:text-[25px] font-bold">
+                  {test.id})
+                </span>
+                <Typography className="flex gap-1 items-center text-[#0e5cad] text-[20px] md:text-[33px] font-bold">
+                  {test.question}
+                </Typography>
+                <div className="flex flex-col lg:flex-row items-center justify-between lg:mt-10">
+                  <div className="w-[100%] lg:w-[40%] lg:order-2 flex items-center justify-center mt-3">
+                    <Image
+                      src={
+                        test?.media?.name
+                          ? `https://github.com/Ayubiy1/test-auto-imgs/blob/main/${test?.media?.name}.png?raw=true`
+                          : Images1
+                      }
+                      alt=""
+                    />
                   </div>
-
-                  <div className="mt-5 md:mt-10">
-                    <span className="text-[#0e5cad] sm:text-[20px] md:text-[25px] font-bold">
-                      {test.id})
-                    </span>
-                    <Typography className="flex gap-1 items-center text-[#0e5cad] text-[20px] md:text-[33px] font-bold">
-                      {test.question}
-                    </Typography>
-
-                    <div className="flex flex-col lg:flex-row items-center justify-between lg:mt-10">
-                      <div className="w-[100%] lg:w-[40%] lg:order-2 flex items-center justify-center mt-3">
-                        <Image
-                          src={
-                            test?.media?.name
-                              ? `https://github.com/Ayubiy1/test-auto-imgs/blob/main/${test?.media?.name}.png?raw=true`
-                              : Images1
+                  <div className="mt-3 w-[100%] lg:w-[60%]">
+                    {test.choices.map((answer, index) => (
+                      <div
+                        className={`w-[100%] p-2 my-1 answer ${
+                          selectAnswer[test.id] === answer.text && answer.answer
+                            ? "bg-green-500"
+                            : selectAnswer[test.id] === answer.text
+                            ? "bg-red-600 text-white"
+                            : "bg-[#80808014]"
+                        } ${
+                          isFinished == true
+                            ? "cursor-no-drop"
+                            : "cursor-pointer"
+                        }`}
+                        onClick={() => {
+                          if (!isFinished) {
+                            changeAnswer(test, answer);
                           }
-                          alt=""
-                        />
+                        }}
+                        key={index}
+                      >
+                        <Typography className="font-bold">
+                          {answer.text}
+                        </Typography>
                       </div>
-
-                      <div className="mt-3 w-[100%] lg:w-[60%]">
-                        {test.choices.map((answer, index) => {
-                          const isSelected = choosAnswers.some(
-                            (item) =>
-                              item.testId === test.id &&
-                              item.answerText === answer.text
-                          );
-
-                          return (
-                            <div
-                              className={`w-[100%] p-2 my-1 answer ${
-                                chooseAnswer === answer.text
-                                  ? "text-white bg-yellow-300"
-                                  : isSelected
-                                  ? "bg-yellow-300"
-                                  : "bg-[#80808014]"
-                              }`}
-                              onClick={() => {
-                                changeAnswer(item, test, answer);
-                              }}
-                              key={index}
-                            >
-                              <Typography className="font-bold">
-                                {answer.text}
-                              </Typography>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
-              );
-            });
-        })
+              </div>
+            </div>
+          ))
+        )
       ) : (
         <div>
           <div className="mt-5 md:mt-10">
-            <Skeleton.Button
-              active={true}
-              size={"large"}
-              shape="default"
-              block={true}
-            />
+            <Skeleton.Button active size="large" shape="default" block />
             <div className="flex flex-col lg:flex-row items-center justify-between lg:mt-10">
               <div className="w-[100%] lg:w-[40%] lg:order-2 flex items-center justify-center mt-3">
                 <Skeleton.Image
-                  active={true}
+                  active
                   style={{ width: "400px", height: "200px" }}
                 />
               </div>
-
               <div className={`w-[100%] p-2 my-1`}>
                 <Skeleton active />
               </div>
@@ -230,6 +171,23 @@ const Test = () => {
           </div>
         </div>
       )}
+
+      <Modal title="Javoblar" centeredx footer={false} open={isFinished}>
+        {data?.data?.map((item) => {
+          return (
+            <>
+              <span>
+                {item?.tests.length} ta savoldan {choosAnswers?.length} tasini
+                topdingiz
+              </span>
+
+              <div className="flex items-center justify-end">
+                <Button type="primary">Orqaga qaytish</Button>
+              </div>
+            </>
+          );
+        })}
+      </Modal>
     </>
   );
 };

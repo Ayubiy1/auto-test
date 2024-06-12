@@ -2,78 +2,70 @@ import { useContext } from "react";
 import Contex from "../../components/contex";
 import { useQuery } from "react-query";
 import axios from "axios";
-import Typography from "antd/es/typography/Typography";
-import { Col, Row } from "antd";
+import { Col, Row, Typography } from "antd";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
 const Results = () => {
-  const { setChooseAllAnswer, chooseAllAnswer, userId } = useContext(Contex);
+  const { chooseAllAnswer, userId } = useContext(Contex);
+  const variantName = useSelector((state) => state.variantName);
 
   const navigate = useNavigate();
 
-  const { data } = useQuery("", () => {
-    return axios.get("https://auto-test-api-8ch5.onrender.com/answers");
+  const { data, isLoading } = useQuery("answers-results", () => {
+    return axios.get(`https://auto-test-api-8ch5.onrender.com/test-uz?id=1`);
   });
 
   return (
     <>
       <div>
-        <Row className={"flex items-start  justify-center  p-2"}>
-          {/* {data?.data
-            ?.filter((i) => i?.userId == userId)
-            .map((item, index) => {
-              return (
-                <Col
-                  span={12}
-                  xs={{ span: 20 }}
-                  md={{ span: 12 }}
-                  lg={{ span: 8 }}
-                  xl={{ span: 6 }}
-                  key={index}
-                >
-                  <div
-                    className="shadowmd p-2 rounded-sm m-1"
-                    style={{ border: "1px solid #80808026" }}
+        <Row className={"flex items-start  justify-center w-[100%] p-2"}>
+          {data?.data?.map((item) => {
+            return (
+              <div
+                className="shadowmd p-2 rounded-sm m-1 w-[100%] md:w-[60%]"
+                style={{ border: "1px solid #80808026" }}
+                key={item.id}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[#4096ff] text-[20px] font-bold">
+                    {item?.name}
+                  </span>
+
+                  <span
+                    className="p-1 shadow-md cursor-pointer text-[11px] rounded-sm"
+                    onClick={() => {
+                      navigate(`/test/${item?.name}`);
+                    }}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[#4096ff] text-[14px] font-bold">
-                        {item?.variantName}
-                      </span>
+                    Qayta ishlash
+                  </span>
+                </div>
 
+                <Typography
+                  className="my-0.5 text-[#606060]"
+                  style={{ fontFamily: "Montserrat,serif !important" }}
+                >
+                  {item?.tests?.length} tadan 20 tasi ishlandi
+                </Typography>
+
+                <div className="mt-2 w-[100%] h-[77vh] overflow-y-scroll">
+                  {item.tests?.map((a, indexCh) => {
+                    console.log(a);
+                    return (
                       <span
-                        className="p-1 shadow-md cursor-pointer text-[11px] rounded-sm"
-                        onClick={() => {
-                          navigate(`/test/${item?.variantName}`);
-                        }}
+                        key={indexCh}
+                        className="flex items-center justify-center shadow-lg cursor-pointer rounded-md my-4 py-2"
+                        style={{ border: "1px solid #80808026" }}
                       >
-                        Qayta ishlash
+                        {a?.question}
                       </span>
-                    </div>
-
-                    <Typography
-                      className="my-0.5 text-[#606060]"
-                      style={{ fontFamily: "Montserrat,serif !important" }}
-                    >
-                      20 tadan {item?.answers.length}tasi ishlandi
-                    </Typography>
-
-                    <div className="flex items-center justify-center">
-                      {item?.answers?.map((a, indexCh) => {
-                        return (
-                          <span
-                            key={indexCh}
-                            className="w-[50px] h-[30px] flex items-center justify-center shadowlg cursor-pointer rounded-md mx-1"
-                            style={{ border: "1px solid #80808026" }}
-                          >
-                            {indexCh + 1}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </Col>
-              );
-            })} */}
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
         </Row>
       </div>
     </>
