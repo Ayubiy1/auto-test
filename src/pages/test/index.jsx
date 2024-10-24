@@ -15,7 +15,7 @@ const Test = () => {
   const navigate = useNavigate();
 
   const { userId, setChooseAllAnswer } = useContext(Contex);
-  const [finishTimeM, setFinishTimeM] = useState(1500);
+  const [finishTimeM, setFinishTimeM] = useState(25);
   const [finishTimeS, setFinishTimeS] = useState(0);
   const [choosAnswers, setChoosAnswers] = useState([]);
   const [paginatsion1, setPAgination1] = useState(0);
@@ -37,7 +37,7 @@ const Test = () => {
           return 0;
         }
       });
-    }, 1);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [finishTimeM]);
