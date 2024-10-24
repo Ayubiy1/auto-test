@@ -64,6 +64,10 @@ const Test = () => {
     }
   };
 
+  const prematureTermination = () => {
+    setIsFinished(true)
+  }
+
   const resultAdd = ({ choosAnswers, variantName }) => {
     setChooseAllAnswer(choosAnswers);
   };
@@ -84,7 +88,10 @@ const Test = () => {
                 >
                   Oldingi test
                 </Button>
-                <Button disabled={isFinished}>
+                <Button onClick={()=>{
+                  prematureTermination()
+                }}
+                 >
                   {finishTimeM}:{finishTimeS < 10 ? 0 : ""}
                   {finishTimeS}
                 </Button>
