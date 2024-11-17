@@ -16,6 +16,13 @@ const SettingPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!sessionStorage.getItem('refreshed')) {
+            sessionStorage.setItem('refreshed', 'true');
+            window.location.reload();
+        }
+    }, []);
+
+    useEffect(() => {
         const userFound = localStorage.getItem("user");
         if (!userFound) {
             navigate("/");
@@ -27,7 +34,7 @@ const SettingPage = () => {
     };
 
     const { data, isLoading } = useQuery("user-data", () => {
-        return axios.get(`http://localhost:3004/users?id=1`);
+        return axios.get(`https://auto-test-api-8ch5.onrender.com/users?id=${userId}`);
     }, {
         onSuccess: (response) => {
             setUserData(response.data);
@@ -80,7 +87,7 @@ const SettingPage = () => {
             {contextHolder}
 
             <Form
-                className="w-[30%] mx-auto"
+                className="lg:w-[30%] mx-auto"
                 onValuesChange={onValuesChange}
                 form={form}
                 onFinish={onFinish}

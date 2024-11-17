@@ -62,7 +62,7 @@ const Test = () => {
           return 0;
         }
       });
-    }, 50);
+    }, 100);
     return () => clearInterval(interval);
   }, [finishTimeM, finishTimeS]);
 
@@ -118,10 +118,10 @@ const Test = () => {
                 >
                   Oldingi test
                 </Button>
-                <Button onClick={()=>{
-                  prematureTermination()
+                <Button onClick={() => {
+                  // prematureTermination()
                 }}
-                 >
+                >
                   {finishTimeM}:{finishTimeS < 10 ? 0 : ""}
                   {finishTimeS}
                 </Button>
