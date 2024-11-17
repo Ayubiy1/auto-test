@@ -1,22 +1,41 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Layout, Button, theme } from "antd";
+import { Layout, Button, theme, Menu, Dropdown } from "antd";
 import { useContext } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import Contex from "../contex";
 
 import Logo from "./logo_new.png";
+import "./style.css"
 
 const { Header } = Layout;
 const HeaderComp = ({ collapsed, setCollapsed }) => {
   const { userActive } = useContext(Contex);
   const userActiveR = useSelector((state) => state?.userActive);
   const navigate = useNavigate();
+  const location = useLocation()
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+
+  const menu = (
+    <Menu onSelect={(e) => console.log(e)} className="w-[100px]">
+      <Menu.Item className="w-full" onClick={() => {
+        localStorage.clear()
+        window.location.reload();
+        // navigate("/login")
+      }}>
+        Log Out
+      </Menu.Item>
+      <Menu.Item className="w-full" onClick={() => {
+        navigate("/setting")
+      }}>
+        Setting
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <>
@@ -35,9 +54,30 @@ const HeaderComp = ({ collapsed, setCollapsed }) => {
         />
 
         <ul className="hidden md:flex gap-2 items-center justify-center list-none m-0 p-0">
-          <li>Bosh sahifa</li>
-          <li>Testlar</li>
-          <li></li>
+          <li
+            className={location.pathname === "/" ? "active-li" : ""}
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Bosh sahifa
+          </li>
+          <li
+            className={location.pathname === "/tests" ? "active-li" : ""}
+            onClick={() => {
+              navigate("/tests");
+            }}
+          >
+            Testlar
+          </li>
+          <li
+            className={location.pathname === "/history" ? "active-li" : ""}
+            onClick={() => {
+              navigate("/history");
+            }}
+          >
+            Tarix
+          </li>
         </ul>
 
         {/* <Button
@@ -52,13 +92,21 @@ const HeaderComp = ({ collapsed, setCollapsed }) => {
         /> */}
 
         {userActive == true ? (
-          <span className="text-[30px] cursor-pointer">
-            <FaUserCircle />
-          </span>
+          <Dropdown overlay={menu} trigger={['click']}>
+            <a
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+              style={{ fontWeight: 'bold' }}
+            >
+              <span className="w-[101px] text-[30px] cursor-pointer">
+                <FaUserCircle />
+              </span>
+            </a>
+          </Dropdown>
         ) : (
           <Button
             type="primary"
-            className="rounded-full"
+            className="w-[101px] rounded-full"
             onClick={() => {
               navigate("/login");
             }}

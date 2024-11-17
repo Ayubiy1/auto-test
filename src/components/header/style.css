@@ -1,0 +1,17 @@
+li {
+    width: 70px;
+    text-align: center;
+    cursor: pointer;
+    color: #0c7efa;
+    transition: .8s;
+    border: transparent;
+}
+
+li:hover {
+    transition: .8s;
+    border-bottom: 1px solid;
+}
+
+.active-li {
+    border-bottom: 1px solid;
+}

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import { useLocalStorageState } from "ahooks";
+import SettingPage from "./pages/setting";
 
 function App() {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ function App() {
             <Route path="test/:variant" element={<Test />} />
             <Route path="test/results" element={<Results />} />
             <Route path="/history" element={<History />} />
+            <Route path="/setting" element={<SettingPage />} />
           </Route>
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />

@@ -1,29 +1,54 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router";
 import { Button, Image, Modal, Skeleton, Typography } from "antd";
-
 import "./style.css";
 import Images1 from "./Autotest_Images/i.webp";
 import Contex from "../../components/contex";
-import { setVariantName } from "../../redux/store";
-import { useDispatch } from "react-redux";
 
 const Test = () => {
   const { id, variant } = useParams();
   const navigate = useNavigate();
-
+  const queryClient = useQueryClient()
   const { userId, setChooseAllAnswer } = useContext(Contex);
-  const [finishTimeM, setFinishTimeM] = useState(25);
+  const [finishTimeM, setFinishTimeM] = useState(5);
   const [finishTimeS, setFinishTimeS] = useState(0);
   const [choosAnswers, setChoosAnswers] = useState([]);
   const [paginatsion1, setPAgination1] = useState(0);
   const [paginatsion2, setPAgination2] = useState(1);
   const [selectAnswer, setSelectAnswer] = useState({});
   const [isFinished, setIsFinished] = useState(false);
+  const date = new Date();
+  const formattedDateTime = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+  console.log(formattedDateTime);
+
+
+
+  const { mutate } = useMutation((hData) => {
+    return axios.post("http://localhost:3004/historys", hData)
+    // return axios.post("https://auto-test-api-8ch5.onrender.com/historys", hData)
+  }, {
+    onSuccess: () => {
+    }
+  })
+  const { data: historysData } = useQuery("history-data", () => {
+    return axios.get("https://auto-test-api-8ch5.onrender.com/historys")
+  })
+  const { data: historyData } = useQuery("history-data", () => {
+    return axios.get(`https://auto-test-api-8ch5.onrender.com/historys?userId=${userId}`)
+  })
+  // this is tests data to find test the selected test name
+  const { data, isLoading } = useQuery(
+    ["tests-uz-data", paginatsion1, paginatsion2],
+    () =>
+      axios.get(
+        `https://auto-test-api-8ch5.onrender.com/test-uz/?name=${variant}`
+      )
+  );
 
   useEffect(() => {
+    // if (!historysData) return; // historysData mavjudligini tekshiramiz
     const interval = setInterval(() => {
       setFinishTimeS((prev) => {
         if (prev > 0) {
@@ -37,18 +62,28 @@ const Test = () => {
           return 0;
         }
       });
-    }, 1);
-
+    }, 50);
     return () => clearInterval(interval);
-  }, [finishTimeM]);
+  }, [finishTimeM, finishTimeS]);
 
-  const { data, isLoading } = useQuery(
-    ["tests-uz-data", paginatsion1, paginatsion2],
-    () =>
-      axios.get(
-        `https://auto-test-api-8ch5.onrender.com/test-uz/?name=${variant}`
-      )
-  );
+  useEffect(() => {
+    if (Object.keys(selectAnswer).length !== 0) {
+      const userExists = historysData?.data?.find((hItem) => hItem.userId = userId);
+
+
+      const dataa = {
+        userId,
+        complated: selectAnswer,
+        variantName: "1-variant",
+        foundedCount: Object.keys(selectAnswer).length,
+        doneBefore: !userExists ? false : true,
+        date: formattedDateTime
+      };
+
+
+      mutate(dataa);
+    }
+  }, [isFinished])
 
   const changeAnswer = (test, answer) => {
     if (!selectAnswer[test.id]) {
@@ -63,7 +98,6 @@ const Test = () => {
       }));
     }
   };
-
   const resultAdd = ({ choosAnswers, variantName }) => {
     setChooseAllAnswer(choosAnswers);
   };
@@ -80,7 +114,7 @@ const Test = () => {
                     setPAgination1(paginatsion1 - 1);
                     setPAgination2(paginatsion2 - 1);
                   }}
-                  disabled={paginatsion1 < 1}
+                  disabled={paginatsion1 < 1 || finishTimeM == 0}
                 >
                   Oldingi test
                 </Button>
@@ -93,7 +127,7 @@ const Test = () => {
                     setPAgination1(paginatsion1 + 1);
                     setPAgination2(paginatsion2 + 1);
                   }}
-                  disabled={paginatsion2 === item?.tests.length}
+                  disabled={paginatsion2 === item?.tests.length || finishTimeM == 0}
                 >
                   Keyingi test
                 </Button>
@@ -119,19 +153,17 @@ const Test = () => {
                   <div className="mt-3 w-[100%] lg:w-[60%]">
                     {test.choices.map((answer, index) => (
                       <div
-                        className={`w-[100%] p-2 my-1 answer ${
-                          selectAnswer[test.id] === answer.text && answer.answer
-                            ? "bg-green-500"
-                            : selectAnswer[test.id] === answer.text
+                        className={`w-[100%] p-2 my-1 answer ${selectAnswer[test.id] === answer.text && answer.answer
+                          ? "bg-green-500"
+                          : selectAnswer[test.id] === answer.text
                             ? "bg-red-600 text-white"
                             : "bg-[#80808014]"
-                        } ${
-                          isFinished == true
+                          } ${isFinished == true
                             ? "cursor-no-drop"
                             : "cursor-pointer"
-                        }`}
+                          }`}
                         onClick={() => {
-                          if (!isFinished) {
+                          if (!isFinished || finishTimeM == 0) {
                             changeAnswer(test, answer);
                           }
                         }}
@@ -145,7 +177,7 @@ const Test = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div >
           ))
         )
       ) : (
@@ -167,13 +199,15 @@ const Test = () => {
         </div>
       )}
 
-      <Modal title="Javoblar" centeredx footer={false} open={isFinished}>
+      <Modal title="Javoblar" centeredx onCancel={() => {
+        setIsFinished(false)
+      }} footer={false} open={isFinished}>
         {data?.data?.map((item) => {
           return (
             <>
               <span>
                 {item?.tests.length} ta savoldan {choosAnswers?.length} tasini
-                topdingiz
+                bajardingiz
               </span>
 
               <div className="flex flex-col items-start">
@@ -183,7 +217,7 @@ const Test = () => {
                 </span>
                 <span className="">
                   {choosAnswers.filter((chA) => chA?.answer == false).length}
-                  tasi no to'g'ri
+                  tasi noto'g'ri
                 </span>
               </div>
 
@@ -204,5 +238,17 @@ const Test = () => {
     </>
   );
 };
-
 export default Test;
+
+// const { mutate: mutateHistoryPut } = useMutation(
+//   (hData) => {
+//     return axios.put(`https://auto-test-api-8ch5.onrender.com/historys/${hData.userId}`, hData);
+//   },
+//   {
+//     onSuccess: () => {
+//       queryClient.invalidateQueries("history-data");
+//     },
+//     onError: (error) => {
+//     }
+//   }
+// );

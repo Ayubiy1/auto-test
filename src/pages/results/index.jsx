@@ -51,7 +51,6 @@ const Results = () => {
 
                 <div className="mt-2 w-[100%] h-[77vh] overflow-y-scroll">
                   {item.tests?.map((a, indexCh) => {
-                    console.log(a);
                     return (
                       <span
                         key={indexCh}
