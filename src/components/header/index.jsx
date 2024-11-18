@@ -21,7 +21,9 @@ const HeaderComp = ({ collapsed, setCollapsed }) => {
 
 
   const menu = (
-    <Menu onSelect={(e) => console.log(e)} className="w-[100px]">
+    <Menu onSelect={(e) => {
+      // console.log(e)
+    }} className="w-[100px]">
       <Menu.Item className="w-full" onClick={() => {
         localStorage.clear()
         window.location.reload();

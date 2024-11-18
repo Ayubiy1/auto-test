@@ -155,13 +155,13 @@ const Test = () => {
 
                       <div className="mt-3 w-[100%] lg:w-[60%]">
                         {test.choices.map((answer, index) => {
-                          console.log(selectAnswer);
+                          // console.log(selectAnswer);
 
-                          console.log(
-                            selectAnswer !== null
-                              ? selectAnswer?.id + "==" + test?.id
-                              : "null"
-                          );
+                          // console.log(
+                          //   selectAnswer !== null
+                          //     ? selectAnswer?.id + "==" + test?.id
+                          //     : "null"
+                          // );
 
                           return (
                             <div

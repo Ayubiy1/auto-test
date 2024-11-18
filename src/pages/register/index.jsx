@@ -20,7 +20,12 @@ const Register = () => {
       content: "Ma'lumotlaringizni tekshirin qayta kiriting!",
     });
   };
+  const token = Array(3).fill().map(() => Math.random().toString(36).substring(2)).join('').substring(0, 30);
 
+  const { mutate: mutateTokens } = useMutation((dataP) => {
+
+    return axios.post("http://localhost:3004/tokens", dataP)
+  })
   const { data } = useQuery("users-reg", () => {
     return axios.get(`https://auto-test-api-8ch5.onrender.com/users`);
   });
@@ -32,9 +37,18 @@ const Register = () => {
       );
     },
     {
-      onSuccess: () => {
+      onSuccess: (respons) => {
+        const newToken = {
+          userId: respons?.data?.id,
+          token: token,
+          createdAt: new Date().toISOString()
+        }
+
         success();
         navigator("/login");
+        if (respons?.data?.id) {
+          mutateTokens(newToken)
+        }
       },
     }
   );
@@ -67,12 +81,25 @@ const Register = () => {
           >
             <h2 className="text-center">Register</h2>
             <Form.Item
-              label="Ism va Familya"
-              name="fullName"
+              label="Ism"
+              name="firstName"
               rules={[
                 {
                   required: true,
-                  message: "iltimos Ism va Familya kiriting!",
+                  message: "iltimos Ism kiriting!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Familya"
+              name="lastName"
+              rules={[
+                {
+                  required: true,
+                  message: "iltimos Familya kiriting!",
                 },
               ]}
             >

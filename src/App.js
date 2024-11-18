@@ -31,10 +31,21 @@ function App() {
   });
 
   useEffect(() => {
-    if (userActive !== true && location.pathname != "/") {
-      navigate("/login");
+    const tokenVerification = localStorage.getItem("user-token")
+    if (!tokenVerification) {
+      localStorage.clear()
+      // navigate("/login")
+    } else if (location.pathname == "/register") {
+      // navigate("/register")
     }
-  }, [userActive]);
+
+  }, [location.pathname])
+
+  // useEffect(() => {
+  //   if (userActive !== true && location.pathname != "/") {
+  //     navigate("/login");
+  //   }
+  // }, [userActive]);
 
   return (
     <>
