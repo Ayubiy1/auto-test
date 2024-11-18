@@ -59,6 +59,8 @@ const Login = () => {
       navigator("/");
       setUserId(res.id);
       setUserActive(true);
+    } else { 
+      alert("Something else")
     }
   };
 
@@ -84,6 +86,7 @@ const Login = () => {
           >
             <Input type="number" />
           </Form.Item>
+
 
           <Form.Item
             label="Password"

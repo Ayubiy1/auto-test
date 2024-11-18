@@ -21,13 +21,12 @@ const Test = () => {
   const [isFinished, setIsFinished] = useState(false);
   const date = new Date();
   const formattedDateTime = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-  // console.log(formattedDateTime);
 
 
 
   const { mutate } = useMutation((hData) => {
-    return axios.post("http://localhost:3004/historys", hData)
-    // return axios.post("https://auto-test-api-8ch5.onrender.com/historys", hData)
+    // return axios.post("http://localhost:3004/historys", hData)
+    return axios.post("https://auto-test-api-8ch5.onrender.com/historys", hData)
   }, {
     onSuccess: () => {
     }
@@ -38,7 +37,6 @@ const Test = () => {
   const { data: historyData } = useQuery("history-data", () => {
     return axios.get(`https://auto-test-api-8ch5.onrender.com/historys?userId=${userId}`)
   })
-  // this is tests data to find test the selected test name
   const { data, isLoading } = useQuery(
     ["tests-uz-data", paginatsion1, paginatsion2],
     () =>
@@ -84,6 +82,15 @@ const Test = () => {
       mutate(dataa);
     }
   }, [isFinished])
+  useEffect(() => {
+    const token = localStorage.getItem("user-token")
+    if (!token) {
+      setTimeout(() => {
+        navigate("/")
+      }, 2000)
+    }
+  })
+
 
   const changeAnswer = (test, answer) => {
     if (!selectAnswer[test.id]) {

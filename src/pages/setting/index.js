@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from "react-router";
 const SettingPage = () => {
     const { userId } = useContext(Contex);
     const [messageApi, contextHolder] = message.useMessage();
-    const location = useLocation()
+    const location = useLocation();
     const [form] = Form.useForm();
     const [userData, setUserData] = useState(null);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -57,7 +57,7 @@ const SettingPage = () => {
 
     useEffect(() => {
         form.resetFields();
-        if (userData) {
+        if (userData && userData.length > 0) {
             form.setFieldsValue(userData[0]);
             setIsButtonDisabled(true); // Initially disable button
         }
@@ -68,7 +68,7 @@ const SettingPage = () => {
     };
 
     const onValuesChange = (changedValues, allValues) => {
-        const isChanged = Object.keys(allValues).some(
+        const isChanged = userData && userData.length > 0 && Object.keys(allValues).some(
             key => allValues[key] !== userData[0][key]
         );
         setIsButtonDisabled(!isChanged);
@@ -91,7 +91,7 @@ const SettingPage = () => {
                 onValuesChange={onValuesChange}
                 form={form}
                 onFinish={onFinish}
-                initialValues={userData ? userData[0] : {}}
+                initialValues={userData && userData.length > 0 ? userData[0] : {}}
             >
                 <Form.Item label="Ismi:" name="firstname">
                     <Input type="text" />

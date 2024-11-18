@@ -82,7 +82,7 @@ const Register = () => {
             <h2 className="text-center">Register</h2>
             <Form.Item
               label="Ism"
-              name="firstName"
+              name="firstname"
               rules={[
                 {
                   required: true,

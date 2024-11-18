@@ -6,9 +6,19 @@ import { FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import "./style.css";
+import { useEffect } from "react";
 
 const Tests = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("user-token")
+    if (!token) {
+      setTimeout(() => {
+        navigate("/")
+      }, 2000)
+    }
+  })
 
   const { data, isLoading, isError } = useQuery("tests-uz-data", () => {
     return axios.get(`https://auto-test-api-8ch5.onrender.com/test-uz`);
