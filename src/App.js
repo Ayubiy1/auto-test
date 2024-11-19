@@ -12,6 +12,9 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import { useLocalStorageState } from "ahooks";
 import SettingPage from "./pages/setting";
+import AdminPage from "./pages/admin";
+import UserAdmin from "./pages/admin/users";
+import TestsAdmin from "./pages/admin/tests";
 
 function App() {
   const navigate = useNavigate();
@@ -69,6 +72,10 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/setting" element={<SettingPage />} />
           </Route>
+          <Route path="admin" element={<AdminPage />}>
+            <Route path="users" element={<UserAdmin />} />
+            <Route path="tests" element={<TestsAdmin />} />
+          </Route>
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route
@@ -86,52 +93,3 @@ function App() {
 }
 
 export default App;
-
-{
-  /* <Routes>
-        <Route path="/">
-          <Layout className="h-[100vh]">
-            <Sider trigger={null} collapsible collapsed={collapsed}>
-              <div className="demo-logo-vertical" />
-              <Menu
-                theme="dark"
-                mode="inline"
-                defaultSelectedKeys={["1"]}
-                items={[
-                  {
-                    key: "1",
-                    icon: <UserOutlined />,
-                    label: "nav 1",
-                  },
-                  {
-                    key: "2",
-                    icon: <VideoCameraOutlined />,
-                    label: "nav 2",
-                  },
-                  {
-                    key: "3",
-                    icon: <UploadOutlined />,
-                    label: "nav 3",
-                  },
-                ]}
-              />
-            </Sider>
-            <Layout>
-              <HeaderComp collapsed={collapsed} setCollapsed={setCollapsed} />
-
-              <Content
-                style={{
-                  margin: "24px 16px",
-                  padding: 24,
-                  minHeight: 280,
-                  background: colorBgContainer,
-                  borderRadius: borderRadiusLG,
-                }}
-              >
-                <Route path="tests" element={<Tests />} />
-              </Content>
-            </Layout>
-          </Layout>
-        </Route>
-      </Routes> */
-}

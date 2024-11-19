@@ -7,10 +7,11 @@ const initialState = {
   search: "",
   userActive: false,
   variantName: "",
+  choosedMenu: ""
 };
 
 const counterSlice = createSlice({
-  name: "sopa",
+  name: "auto-test",
   initialState,
   reducers: {
     setLoadingTrue: (state, actions) => {
@@ -20,8 +21,12 @@ const counterSlice = createSlice({
     setVariantName: (state, action) => {
       state.variantName = action.payload;
     },
+
+    setChoosedMenu: (state, action) => {
+      state.choosedMenu = action.payload
+    }
   },
 });
 
-export const { setLoadingTrue, setVariantName } = counterSlice.actions;
+export const { setLoadingTrue, setVariantName, setChoosedMenu } = counterSlice.actions;
 export default counterSlice.reducer;

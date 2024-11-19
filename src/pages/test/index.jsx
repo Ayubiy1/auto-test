@@ -28,9 +28,12 @@ const Test = () => {
     // return axios.post("http://localhost:3004/historys", hData)
     return axios.post("https://auto-test-api-8ch5.onrender.com/historys", hData)
   }, {
-    onSuccess: () => {
+    onSuccess: (respons) => {
+      console.log(respons);
+      queryClient.invalidateQueries("history-data")
     }
   })
+
   const { data: historysData } = useQuery("history-data", () => {
     return axios.get("https://auto-test-api-8ch5.onrender.com/historys")
   })
@@ -72,16 +75,19 @@ const Test = () => {
       const dataa = {
         userId,
         complated: selectAnswer,
-        variantName: "1-variant",
+        variantName: variant,
         foundedCount: Object.keys(selectAnswer).length,
         doneBefore: !userExists ? false : true,
         date: formattedDateTime
       };
+      console.log(dataa);
+
 
 
       mutate(dataa);
     }
   }, [isFinished])
+
   useEffect(() => {
     const token = localStorage.getItem("user-token")
     if (!token) {
@@ -209,9 +215,11 @@ const Test = () => {
         </div>
       )}
 
-      <Modal title="Javoblar" centeredx onCancel={() => {
-        setIsFinished(false)
-      }} footer={false} open={isFinished}>
+      <Modal title="Javoblar" centeredx
+        // onCancel={() => {
+        //   setIsFinished(false)
+        // }}
+        footer={false} open={isFinished}>
         {data?.data?.map((item) => {
           return (
             <>

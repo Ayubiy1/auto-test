@@ -8,7 +8,7 @@ const History = () => {
   const { userId } = useContext(Contex)
 
   const { data } = useQuery("history-data", () => {
-    return axios.get(`http://localhost:3004/historys?userId=${userId}`)
+    return axios.get(`https://auto-test-api-8ch5.onrender.com/historys?userId=${userId}`)
   })
 
   const date = new Date();
